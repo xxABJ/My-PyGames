@@ -1,0 +1,61 @@
+{
+    "Settings": {
+        "Players": {
+            "cat": [
+                "Abj",
+                "blue",
+                "pygame.image.load(os.path.join(\"assets\", \"cat_blue.png\"))"
+            ],
+            "dog": [
+                "Rain",
+                "red",
+                "pygame.image.load(os.path.join(\"assets\", \"dog_red.png\"))"
+            ],
+            "sheep": [
+                "Alex",
+                "red",
+                "pygame.image.load(os.path.join(\"assets\", \"sheep_red.png\"))"
+            ],
+            "fly": [
+                "Chrystal",
+                "red",
+                "pygame.image.load(os.path.join(\"assets\", \"fly_red.png\"))"
+            ]
+        },
+        "Total_players": 4
+    },
+    "Game": {
+        "Players": {
+            "Positions": {
+                "cat": 1,
+                "dog": 11,
+                "sheep": 0,
+                "fly": 11
+            },
+            "Turns": {
+                "cat": false,
+                "dog": false,
+                "sheep": false,
+                "fly": false
+            },
+            "Rects": {
+                "cat": {
+                    "x": 20,
+                    "y": 640
+                },
+                "dog": {
+                    "x": 60,
+                    "y": 900
+                },
+                "sheep": {
+                    "x": 40,
+                    "y": 840
+                },
+                "fly": {
+                    "x": 60,
+                    "y": 760
+                }
+            }
+        }
+    }
+}
