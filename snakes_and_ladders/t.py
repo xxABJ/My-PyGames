@@ -19,3 +19,24 @@ for block, players in player_block_info.items():
             pass
 
 # CHANGE occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo, remove playersOnBlocks & so _blockrect are a dict that assigns {(playertype, corner), (the extra x&y)} , if playertype is on same block then when assigning corners, the duped player should have the OTHER correct corner of the same "BLOCK_HAS_"
+
+# now
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# yo
