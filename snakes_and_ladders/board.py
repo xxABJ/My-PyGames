@@ -134,6 +134,46 @@ BLOCK_HAS_ONE = {"m": (round(BLOCKSIZE*0.5), round(BLOCKSIZE*0.5))}
 
 OCCUPIED_BLOCKS = {}
 
+def block_elements(key, block_number, current_rects):
+    ELEMENTS = {
+    "2": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-4*BLOCKSIZE), #up to 23
+    "13": (7*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE), #up to 93
+    "16": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-2*BLOCKSIZE), #down to 4
+    "26": (5*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE), #up to 45
+    "38": (8*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-5*BLOCKSIZE), #down to 33
+    "43": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE), #up to 58
+    "59": (2*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE), #down to 42
+    "62": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-10*BLOCKSIZE), #up to 84
+    "73": (6*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE), #down to 55
+    "81": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE), #up to 100
+    "91": (10*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-3*BLOCKSIZE), #down to 11
+    "97": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-8*BLOCKSIZE), #down to 64
+}
+    
+    if str(block_number) in ELEMENTS:
+        translate = ELEMENTS[f"{block_number}"]
+        print(f"\nChanging pos to: \n{translate}\n")
+        return ELEMENTS[f"{block_number}"]
+    return position(key, block_number, current_rects)
+
+def position(key, block_number, current_rects):
+    if block_number != 0:
+        block = BLOCKS[f"{block_number}"]
+        return block
+    else:
+        if key == 'cat':
+            return (current_rects[key]["x"], current_rects[key]["y"])
+        elif key == 'dog':
+            return (current_rects[key]["x"], current_rects[key]["y"])
+        elif key == 'sheep':
+            return (current_rects[key]["x"], current_rects[key]["y"])
+        elif key == 'fly':
+            return (current_rects[key]["x"], current_rects[key]["y"])
+        
+def print_position(block_number): #print pos
+    block = BLOCKS[f"{block_number}"]
+    return print(f"\nCurrent position: \n{block}\n")
+
 def position_indicators(file): # dict indicator of blocks
     current_positions = file["Game"]["Players"]["Positions"]
     current_rects = file["Game"]["Players"]["Rects"]
@@ -186,46 +226,6 @@ def block_handler(OCCUPIED_BLOCKS):
     return draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo)
     return occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo
 
-def block_elements(key, block_number, current_rects):
-    ELEMENTS = {
-    "2": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-4*BLOCKSIZE), #up to 23
-    "13": (7*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE), #up to 93
-    "16": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-2*BLOCKSIZE), #down to 4
-    "26": (5*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE), #up to 45
-    "38": (8*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-5*BLOCKSIZE), #down to 33
-    "43": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE), #up to 58
-    "59": (2*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE), #down to 42
-    "62": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-10*BLOCKSIZE), #up to 84
-    "73": (6*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE), #down to 55
-    "81": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE), #up to 100
-    "91": (10*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-3*BLOCKSIZE), #down to 11
-    "97": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-8*BLOCKSIZE), #down to 64
-}
-    
-    if str(block_number) in ELEMENTS:
-        translate = ELEMENTS[f"{block_number}"]
-        print(f"\nChanging pos to: \n{translate}\n")
-        return ELEMENTS[f"{block_number}"]
-    return position(key, block_number, current_rects)
-
-def position(key, block_number, current_rects):
-    if block_number != 0:
-        block = BLOCKS[f"{block_number}"]
-        return block
-    else:
-        if key == 'cat':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        elif key == 'dog':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        elif key == 'sheep':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        elif key == 'fly':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        
-def print_position(block_number): #print pos
-    block = BLOCKS[f"{block_number}"]
-    return print(f"\nCurrent position: \n{block}\n")
-
 def board(file):
     position_indicators(file)
 
@@ -237,25 +237,68 @@ def draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_play
     block_premade_rects = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[2]
     player_block_info = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[3]
 
-    for block, players in player_block_info.items():
-    
-        for key, value in occupied_blocks.items():
-            (x, y) = value
-            print()
-            print(f"value: {value}")
+    corner_index = 0
+    position_index = 0
+    players_index = 0
+    for key, value in occupied_blocks.items():
+        print(f"\ntop corner_index: {corner_index}")
+        print(f"top position_index: {position_index}")
+        (x, y) = value
+        print(key[0], key[1])
+        print(f"value: {value}")
 
-            if key[1] == 0 and key[1] not in draw_block_rects.keys():
-                print("\nthe block is 0")
-                draw_block_rects[key[0]] = (key[1], pygame.Rect(x, y, 20, 20)) 
-            #break
-        
-            if block != 0:
-                for corners, positions in block_premade_rects.items():
-                    draw_block_rects[block] = (corners, pygame.Rect(x + positions[0], y + positions [1], 20, 20))
-                    print(f"\nblock: {block} \nplayers: {players}")
-    
-            else:
-                pass
+        if key[1] == 0: #and key[1] not in draw_block_rects.keys():
+            print("the block is 0")
+            draw_block_rects[key[0]] = (key[1], pygame.Rect(x, y, 20, 20))
+
+        else:#if key[1] != 0: #and block not in draw_block_rects.keys():
+
+            corners = list(block_premade_rects.keys())
+            positions = list(block_premade_rects.values())
+
+            block = list(player_block_info.keys())
+            players = list(player_block_info.values())
+
+            print(f"corners: {corners}")
+            print(f"positions: {positions}")
+
+            draw_block_rects[key[0]] = (corners[corner_index], pygame.Rect(x + positions[position_index][0], y + positions[position_index][1], 20, 20))
+            #position_index += 1
+
+            print(players_index)
+
+            if players[players_index] == 1:
+                print(f"player Type: {key[0]} \nplayers on the same block: {players[players_index]}")
+                players_index += 1
+
+            #elif players[players_index] > 1 and players[players_index] != max(players):
+            #    print(f"player Type: {key[0]} \nplayers on the same block: {players[players_index]}")
+            #    players_index += 1
+
+            elif players[players_index] > 1 or players[players_index] == 1 and len(players)-1 > players_index >= 1:
+                print(f"player Type: {key[0]} \nplayers on the same block: {players[players_index]}")
+                #players_index += 1
+
+            elif players[players_index] == 1 and players[players_index] == max(players):
+                print(f"player Type: {key[0]} \nplayers on the same block: {players[players_index]}")
+                players_index += 1
+
+            #elif players[players_index] == 1 and players_index !=
+            #    players_index = players[players_index]
+
+            print(draw_block_rects[key[0]])
+
+            if len(corners)-1 == corner_index:
+                corner_index = 0
+                position_index = 0
+            elif len(corners)-1 > corner_index and len(corners) > 1:
+                corner_index += 1
+                position_index += 1
+
+            print(f"bottom corner_index: {corner_index}")
+            print(f"bottom position_index: {position_index}")
+
+    print(f"\ndraw_block_rects: {draw_block_rects}")
 
     #for key, value in occupied_blocks.items():
     #    (x, y) = value
@@ -279,7 +322,6 @@ def draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_play
     #        print("\nthe block is 0")
     #        draw_block_rects[key[0]] = (key[1], pygame.Rect(x, y, 20, 20))
 
-    print(f"\ndraw_block_rects: {draw_block_rects}")
     return draw_block_rects
 
 

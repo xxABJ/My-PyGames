@@ -29,8 +29,8 @@
             "Positions": {
                 "cat": 1,
                 "dog": 11,
-                "sheep": 0,
-                "fly": 11
+                "sheep": 11,
+                "fly": 12
             },
             "Turns": {
                 "cat": false,
