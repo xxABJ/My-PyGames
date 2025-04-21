@@ -2,58 +2,39 @@
     "Settings": {
         "Players": {
             "cat": [
-                "Abj",
-                "blue",
-                "pygame.image.load(os.path.join(\"assets\", \"cat_blue.png\"))"
+                "dfhg",
+                "red",
+                [
+                    "assets",
+                    "cat_red.png"
+                ]
             ],
             "dog": [
-                "Rain",
-                "red",
-                "pygame.image.load(os.path.join(\"assets\", \"dog_red.png\"))"
-            ],
-            "sheep": [
-                "Alex",
-                "red",
-                "pygame.image.load(os.path.join(\"assets\", \"sheep_red.png\"))"
-            ],
-            "fly": [
-                "Chrystal",
-                "red",
-                "pygame.image.load(os.path.join(\"assets\", \"fly_red.png\"))"
+                "ghj",
+                "yellow",
+                "pygame.image.load(os.path.join(\"assets\", \"dog_yellow.png\"))"
             ]
         },
-        "Total_players": 4
+        "Total_players": 2
     },
     "Game": {
         "Players": {
             "Positions": {
-                "cat": 1,
-                "dog": 11,
-                "sheep": 11,
-                "fly": 12
+                "cat": 0,
+                "dog": 0
             },
             "Turns": {
                 "cat": false,
-                "dog": false,
-                "sheep": false,
-                "fly": false
+                "dog": false
             },
             "Rects": {
                 "cat": {
-                    "x": 20,
-                    "y": 640
+                    "x": 60,
+                    "y": 920
                 },
                 "dog": {
-                    "x": 60,
-                    "y": 900
-                },
-                "sheep": {
-                    "x": 40,
-                    "y": 840
-                },
-                "fly": {
-                    "x": 60,
-                    "y": 760
+                    "x": 20,
+                    "y": 800
                 }
             }
         }
