@@ -1,4 +1,4 @@
-import tkinter as tk, json, random, os
+import tkinter as tk, json, random, os, pygame
 from tkinter import ttk
 
 #file imports
@@ -13,25 +13,25 @@ file_path = os.path.join("snakes_and_ladders", "game.json")
 # up to 4 players if needed
 # button to proceed
 
-CAT_RED = 'pygame.image.load(os.path.join("assets", "cat_red.png"))'
-CAT_YELLOW = 'pygame.image.load(os.path.join("assets", "cat_yellow.png"))'
-CAT_GREEN = 'pygame.image.load(os.path.join("assets", "cat_green.png"))'
-CAT_BLUE = 'pygame.image.load(os.path.join("assets", "cat_blue.png"))'
+CAT_RED = pygame.image.load(os.path.join("assets", "cat_red.png"))
+CAT_YELLOW = pygame.image.load(os.path.join("assets", "cat_yellow.png"))
+CAT_GREEN = pygame.image.load(os.path.join("assets", "cat_green.png"))
+CAT_BLUE = pygame.image.load(os.path.join("assets", "cat_blue.png"))
 
-DOG_RED = 'pygame.image.load(os.path.join("assets", "dog_red.png"))'
-DOG_YELLOW = 'pygame.image.load(os.path.join("assets", "dog_yellow.png"))'
-DOG_GREEN = 'pygame.image.load(os.path.join("assets", "dog_green.png"))'
-DOG_BLUE = 'pygame.image.load(os.path.join("assets", "dog_blue.png"))'
+DOG_RED = pygame.image.load(os.path.join("assets", "dog_red.png"))
+DOG_YELLOW = pygame.image.load(os.path.join("assets", "dog_yellow.png"))
+DOG_GREEN = pygame.image.load(os.path.join("assets", "dog_green.png"))
+DOG_BLUE = pygame.image.load(os.path.join("assets", "dog_blue.png"))
 
-SHEEP_RED = 'pygame.image.load(os.path.join("assets", "sheep_red.png"))'
-SHEEP_YELLOW = 'pygame.image.load(os.path.join("assets", "sheep_yellow.png"))'
-SHEEP_GREEN = 'pygame.image.load(os.path.join("assets", "sheep_green.png"))'
-SHEEP_BLUE = 'pygame.image.load(os.path.join("assets", "sheep_blue.png"))'
+SHEEP_RED = pygame.image.load(os.path.join("assets", "sheep_red.png"))
+SHEEP_YELLOW = pygame.image.load(os.path.join("assets", "sheep_yellow.png"))
+SHEEP_GREEN = pygame.image.load(os.path.join("assets", "sheep_green.png"))
+SHEEP_BLUE = pygame.image.load(os.path.join("assets", "sheep_blue.png"))
 
-FLY_RED = 'pygame.image.load(os.path.join("assets", "fly_red.png"))'
-FLY_YELLOW = 'pygame.image.load(os.path.join("assets", "fly_yellow.png"))'
-FLY_GREEN = 'pygame.image.load(os.path.join("assets", "fly_green.png"))'
-FLY_BLUE = 'pygame.image.load(os.path.join("assets", "fly_blue.png"))'
+FLY_RED = pygame.image.load(os.path.join("assets", "fly_red.png"))
+FLY_YELLOW = pygame.image.load(os.path.join("assets", "fly_yellow.png"))
+FLY_GREEN = pygame.image.load(os.path.join("assets", "fly_green.png"))
+FLY_BLUE = pygame.image.load(os.path.join("assets", "fly_blue.png"))
 
 def start_button_func():
     total_players = 0
@@ -47,13 +47,13 @@ def start_button_func():
 
         total_players += 1
         if player_1_colour == "red":
-            player_names_colour["cat"] = [player_1_name, player_1_colour, CAT_RED]
+            player_names_colour["cat"] = [player_1_name, player_1_colour]
         elif player_1_colour == "yellow":
-            player_names_colour["cat"] = [player_1_name, player_1_colour, CAT_YELLOW]
+            player_names_colour["cat"] = [player_1_name, player_1_colour]
         elif player_1_colour == "green":
-            player_names_colour["cat"] = [player_1_name, player_1_colour, CAT_GREEN]
+            player_names_colour["cat"] = [player_1_name, player_1_colour]
         elif player_1_colour == "blue":
-            player_names_colour["cat"] = [player_1_name, player_1_colour, CAT_BLUE]
+            player_names_colour["cat"] = [player_1_name, player_1_colour]
 
     if player_2_name != "":
         player_2_colour = player_2_radiobutton_var.get()
@@ -62,13 +62,13 @@ def start_button_func():
 
         total_players += 1
         if player_2_colour == "red":
-            player_names_colour["dog"] = [player_2_name, player_2_colour, DOG_RED]
+            player_names_colour["dog"] = [player_2_name, player_2_colour]
         elif player_2_colour == "yellow":
-            player_names_colour["dog"] = [player_2_name, player_2_colour, DOG_YELLOW]
+            player_names_colour["dog"] = [player_2_name, player_2_colour]
         elif player_2_colour == "green":
-            player_names_colour["dog"] = [player_2_name, player_2_colour, DOG_GREEN]
+            player_names_colour["dog"] = [player_2_name, player_2_colour]
         elif player_2_colour == "blue":
-            player_names_colour["dog"] = [player_2_name, player_2_colour, DOG_BLUE]
+            player_names_colour["dog"] = [player_2_name, player_2_colour]
 
     if player_3_name != "":
         player_3_colour = player_3_radiobutton_var.get()
@@ -77,13 +77,13 @@ def start_button_func():
         
         total_players += 1
         if player_3_colour == "red":
-            player_names_colour["sheep"] = [player_3_name, player_3_colour, SHEEP_RED]
+            player_names_colour["sheep"] = [player_3_name, player_3_colour]
         elif player_3_colour == "yellow":
-            player_names_colour["sheep"] = [player_3_name, player_3_colour, SHEEP_YELLOW]
+            player_names_colour["sheep"] = [player_3_name, player_3_colour]
         elif player_3_colour == "green":
-            player_names_colour["sheep"] = [player_3_name, player_3_colour, SHEEP_GREEN]
+            player_names_colour["sheep"] = [player_3_name, player_3_colour]
         elif player_3_colour == "blue":
-            player_names_colour["sheep"] = [player_3_name, player_3_colour, SHEEP_BLUE]
+            player_names_colour["sheep"] = [player_3_name, player_3_colour]
 
     if player_4_name != "":
         player_4_colour = player_4_radiobutton_var.get()
@@ -92,13 +92,13 @@ def start_button_func():
 
         total_players += 1
         if player_4_colour == "red":
-            player_names_colour["fly"] = [player_4_name, player_4_colour, FLY_RED]
+            player_names_colour["fly"] = [player_4_name, player_4_colour]
         elif player_4_colour == "yellow":
-            player_names_colour["fly"] = [player_4_name, player_4_colour, FLY_YELLOW]
+            player_names_colour["fly"] = [player_4_name, player_4_colour]
         elif player_4_colour == "green":
-            player_names_colour["fly"] = [player_4_name, player_4_colour, FLY_GREEN]
+            player_names_colour["fly"] = [player_4_name, player_4_colour]
         elif player_4_colour == "blue":
-            player_names_colour["fly"] = [player_4_name, player_4_colour, FLY_BLUE]
+            player_names_colour["fly"] = [player_4_name, player_4_colour]
     
     player_indicator["Positions"] = {key: 0 for key, value in player_names_colour.items()}
     player_indicator["Turns"] = {key: False for key, value in player_names_colour.items()}

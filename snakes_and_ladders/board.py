@@ -136,23 +136,22 @@ OCCUPIED_BLOCKS = {}
 
 def block_elements(key, block_number, current_rects):
     ELEMENTS = {
-    "2": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-4*BLOCKSIZE), #up to 23
-    "13": (7*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE), #up to 93
-    "16": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-2*BLOCKSIZE), #down to 4
-    "26": (5*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE), #up to 45
-    "38": (8*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-5*BLOCKSIZE), #down to 33
-    "43": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE), #up to 58
-    "59": (2*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE), #down to 42
-    "62": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-10*BLOCKSIZE), #up to 84
-    "73": (6*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE), #down to 55
-    "81": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE), #up to 100
-    "91": (10*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-3*BLOCKSIZE), #down to 11
-    "97": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-8*BLOCKSIZE), #down to 64
+    "2": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-4*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 23
+    "13": (7*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA), #up to 94
+    "16": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-2*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA), #down to 4
+    "26": (5*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 45
+    "38": (8*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-5*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 33
+    "43": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 58
+    "59": (2*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 42
+    "62": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-10*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 84
+    "73": (6*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 55
+    "81": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA), #up to 100
+    "91": (10*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-3*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 11
+    "97": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-8*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE) #down to 64
 }
-    
     if str(block_number) in ELEMENTS:
         translate = ELEMENTS[f"{block_number}"]
-        print(f"\nChanging pos to: \n{translate}\n")
+        #print(f"\nChanging pos to: \n{translate}\n")
         return ELEMENTS[f"{block_number}"]
     return position(key, block_number, current_rects)
 
@@ -174,14 +173,14 @@ def print_position(block_number): #print pos
     block = BLOCKS[f"{block_number}"]
     return print(f"\nCurrent position: \n{block}\n")
 
-def position_indicators(file): # dict indicator of blocks
+def position_indicators(file, dictionary): # dict indicator of blocks
     current_positions = file["Game"]["Players"]["Positions"]
     current_rects = file["Game"]["Players"]["Rects"]
     for key, value in current_positions.items():
         OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects)
-    return block_handler(OCCUPIED_BLOCKS)
+    return block_handler(OCCUPIED_BLOCKS, dictionary)
 
-def block_handler(OCCUPIED_BLOCKS):
+def block_handler(OCCUPIED_BLOCKS, dictionary):
     """Returns a list of dictionaries containing:\n
        Realtime occupied blocks with x & y positions,\n
        Total number of duplicated players,\n
@@ -204,11 +203,10 @@ def block_handler(OCCUPIED_BLOCKS):
             playerBlockInfo[key[1]] = 1
     same_block = max(playerBlockInfo.values())
    
-    print(f"\nplayerBlockInfo: {playerBlockInfo}")
-    print(f"\nsame_block: {same_block}")
-    print(f"\ntemp: {temp}")
+    #print(f"\nplayerBlockInfo: {playerBlockInfo}")
+    #print(f"\nsame_block: {same_block}")
+    #print(f"\ntemp: {temp}")
     
-    index_position = [] 
     if same_block == 1:
         occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo = [OCCUPIED_BLOCKS, 1, playerBlockInfo, BLOCK_HAS_ONE]
 
@@ -232,28 +230,16 @@ def block_handler(OCCUPIED_BLOCKS):
                 block_corner_dict.append({block: BLOCK_HAS_THREE})
         occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo.append([block_corner_dict, BLOCK_HAS_ONE])
 
-        for index, value in enumerate(temp):
-            if value == temp[index-1]:
-                index_position.append(index)
-            elif value == temp[index-2]:
-                index_position.append(index)
-
     elif same_block == 4:
         occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo = [OCCUPIED_BLOCKS, 4, playerBlockInfo, BLOCK_HAS_FOUR]
 
-    print(f"\nindex_position: {index_position}")
-    print("\noccupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo: ",occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo)
-    print(f"\nOCCUPIED_BLOCKS: {OCCUPIED_BLOCKS}")
+    #print("\noccupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo: ",occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo)
+    #print(f"\nOCCUPIED_BLOCKS: {OCCUPIED_BLOCKS}")
 
-    return draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo)
+    return draw_blocks(occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo, dictionary)
     #return occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo
 
-def board(file):
-    position_indicators(file)
-
-    # func to take in specific rects
-
-def draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo):
+def draw_blocks(occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo, dictionary):
     occupied_blocks = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[0]
     players_on_blocks = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[1]
     player_block_info = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[2] # set for extra info :p
@@ -261,27 +247,29 @@ def draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_play
 
     dynamic_index = 0
     saved_index = 0
+    temp_blocks = []
     
     for key, value in occupied_blocks.items():
         (x, y) = value
-        print("\n"+key[0], key[1])
-        print(f"value: {value}")
+        #print("\n"+key[0], key[1])
+        #print(f"value: {value}")
 
         if key[1] == 0:
-            print("the block is 0")
-            draw_block_rects[key[0]] = (key[1], pygame.Rect(x, y, 20, 20))
-            print(f"\ndraw_block_rects: {draw_block_rects}")
+            #print("the block is 0")
+            dictionary[key[0]] = (key[1], pygame.Rect(x, y, 20, 20))
+            #print(f"\ndraw_block_rects: {draw_block_rects}")
 
         else:
+            #print("Adding extra coords to compensate! . . .")
             if players_on_blocks == 2 or players_on_blocks == 3:
-                indexes = []
+                temp_indexes = []
                 locate_sameblock = []
 
                 for _ in range(len(block_premade_rects[0])):
-                    indexes.append(_)
-                for index in indexes:
+                    temp_indexes.append(_)
+                for index in temp_indexes:
                     locate_sameblock.append(list(block_premade_rects[0][index].keys())[0])
-                print(f"indexes: {indexes}")
+                #print(f"temp_indexes: {temp_indexes}")
 
                 locate_sameblock_dict = list(block_premade_rects[0][0].values())
                 sameblock_corners = list(locate_sameblock_dict[0].keys())
@@ -289,38 +277,57 @@ def draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_play
                 corner = list(block_premade_rects[1].keys())
                 position = list(block_premade_rects[1].values())
 
-                print(f"locate_sameblock: {locate_sameblock}")
-                print(f"locate_sameblock_dict[0]: {locate_sameblock_dict[0]}")
-                print(f"sameblock_corners: {sameblock_corners}")
-                print(f"corner: {corner}")
-                print(f"sameblock_positions: {sameblock_positions}")
-                print(f"positions: {position}")
+                #print(f"locate_sameblock: {locate_sameblock}")
+                #print(f"locate_sameblock_dict[0]: {locate_sameblock_dict[0]}")
+                #print(f"sameblock_corners: {sameblock_corners}")
+                #print(f"corner: {corner}")
+                #print(f"sameblock_positions: {sameblock_positions}")
+                #print(f"positions: {position}")
 
                 if key[1] in locate_sameblock:
-                    draw_block_rects[key[0]] = (sameblock_corners[dynamic_index], pygame.Rect(x + sameblock_positions[dynamic_index][0], y + sameblock_positions[dynamic_index][1], 20, 20))
-                    print(f"\ndraw_block_rects: {draw_block_rects}")
-                    
-                    print()
-                    print(f"before method - dynamic_index: {dynamic_index}")
 
-                    if dynamic_index < len(locate_sameblock)-1 and key[1] != locate_sameblock[0]:
-                        dynamic_index =+ 1
+                    if len(locate_sameblock) == 2:
+                        if dynamic_index < len(locate_sameblock)-1:
+                            if key[1] not in temp_blocks:
+                                #print("not in temp_blocks")
+                                temp_blocks.append(key[1])
+                                #print(f"temp_blocks: {temp_blocks}")
+                            else:
+                                #print("in temp_blocks")
+                                dynamic_index += 1
+                                #print(f"temp_blocks: {temp_blocks}")
+                        elif dynamic_index == len(locate_sameblock)-1:
+                            #print("second")
+                            if key[1] not in temp_blocks:
+                                temp_blocks.append(key[1])
+                                dynamic_index = 0
+                                #print(f"temp_blocks: {temp_blocks}")
+                            else:
+                                dynamic_index = dynamic_index
+                                #print(f"temp_blocks: {temp_blocks}") 
+
                     elif len(locate_sameblock) == 1:
-                        dynamic_index += 1
-                    elif dynamic_index <= len(locate_sameblock)-1 and key[1] == locate_sameblock[0]:
-                        dynamic_index = dynamic_index
+                        if key[1] not in temp_blocks:
+                            #print("not in temp_blocks")
+                            temp_blocks.append(key[1])
+                            #print(f"temp_blocks: {temp_blocks}")
+                        else:
+                            #print("in temp_blocks")
+                            dynamic_index += 1
+                            #print(f"temp_blocks: {temp_blocks}")
+
                     else:
                         dynamic_index = 0
-                    saved_index = dynamic_index
 
-                    print()
-                    print(f"after method - dynamic_index: {dynamic_index}")
+                    saved_index = dynamic_index
+                    dictionary[key[0]] = (sameblock_corners[dynamic_index], pygame.Rect(x + sameblock_positions[dynamic_index][0], y + sameblock_positions[dynamic_index][1], 20, 20))
                 
                 else:
                     dynamic_index = 0
 
-                    draw_block_rects[key[0]] = (corner[dynamic_index], pygame.Rect(x + position[dynamic_index][0], y + position[dynamic_index][1], 20, 20))
-                    print(f"\ndraw_block_rects: {draw_block_rects}")
+                    #print("else of key[1] in locate_sameblock")
+                    dictionary[key[0]] = (corner[dynamic_index], pygame.Rect(x + position[dynamic_index][0], y + position[dynamic_index][1], 20, 20))
+                    #print(f"\ndraw_block_rects: {draw_block_rects}")
 
                     dynamic_index = saved_index
 
@@ -328,33 +335,35 @@ def draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_play
                 corners = list(block_premade_rects.keys())
                 positions = list(block_premade_rects.values())
 
-                print(f"corners: {corners}")
-                print(f"positions: {positions}")
+                #print(f"corners: {corners}")
+                #print(f"positions: {positions}")
 
-                draw_block_rects[key[0]] = (corners[dynamic_index], pygame.Rect(x + positions[dynamic_index][0], y + positions[dynamic_index][1], 20, 20))
-                print(f"draw_block_rects: {draw_block_rects}")
+                dictionary[key[0]] = (corners[dynamic_index], pygame.Rect(x + positions[dynamic_index][0], y + positions[dynamic_index][1], 20, 20))
+                #print(f"draw_block_rects: {draw_block_rects}")
 
                 if len(corners)-1 == dynamic_index:
                     dynamic_index = 0
                 elif len(corners)-1 > dynamic_index and len(corners) > 1:
                     dynamic_index += 1
 
-    print()
-    return draw_block_rects
+    #print(f"\ndraw_block_rects: {draw_block_rects}")
+    return dictionary
 
-
-game = load_settings()
-#player_position = game["Game"]["Players"]["Positions"]["cat"]
+def player_rect_generator(file, dictionary): # func into funcs to return a dict ready for py bliting specific rects
+    return position_indicators(file, dictionary)
+    
+    #print()
+    #print(draw_block_rects)
+    #print()
 
 #position(43)
 #block_elements(43)
 #position_indicators(game)
 #block_handler()
 
-if __name__ == "__main__":
-    occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo = []
-    draw_block_rects = {}
-    
-    board(game)
+game = load_settings()
 
-    #draw_blocks(draw_block_rects, occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo)
+if __name__ == "__main__":
+    player_rects = {}
+    player_rect_generator(game, player_rects)
+    print(player_rects)
