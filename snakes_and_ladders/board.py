@@ -124,36 +124,40 @@ BLOCKS = {
     "100": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA),
     }
 
-BLOCK_HAS_FOUR = {"tl": (round(BLOCKSIZE*0.25), round(BLOCKSIZE*0.25)), "tr": (round(BLOCKSIZE*0.75), round(BLOCKSIZE*0.25)), "bl": (round(BLOCKSIZE*0.25), round(BLOCKSIZE*0.75)), "br": (round(BLOCKSIZE*0.75), round(BLOCKSIZE*0.75))}
+BLOCK_HAS_FOUR = {"tl": (round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5)), "tr": (round(BLOCKSIZE*0.75)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5)), "bl": (round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.75)-random.randrange(0, 20, 5)), "br": (round(BLOCKSIZE*0.75)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.75)-random.randrange(0, 20, 5))}
 
-BLOCK_HAS_THREE = {"tl": (round(BLOCKSIZE*0.25), round(BLOCKSIZE*0.25)), "tr": (round(BLOCKSIZE*0.75), round(BLOCKSIZE*0.25)), "b": (round(BLOCKSIZE*0.6), round(BLOCKSIZE*0.5))}
+BLOCK_HAS_THREE = {"tl": (round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5)), "tr": (round(BLOCKSIZE*0.75)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5)), "b": (round(BLOCKSIZE*0.5)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.7)-random.randrange(0, 20, 5))}
 
-BLOCK_HAS_TWO = {"l": (round(BLOCKSIZE*0.25), round(BLOCKSIZE*0.5)), "r": (round(BLOCKSIZE*0.75), round(BLOCKSIZE*0.5))}
+BLOCK_HAS_TWO = {"l": (round(BLOCKSIZE*0.25)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.5)-random.randrange(0, 20, 5)), "r": (round(BLOCKSIZE*0.75)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.5)-random.randrange(0, 20, 5))}
 
-BLOCK_HAS_ONE = {"m": (round(BLOCKSIZE*0.5), round(BLOCKSIZE*0.5))}
+BLOCK_HAS_ONE = {"m": (round(BLOCKSIZE*0.5)-random.randrange(0, 20, 5), round(BLOCKSIZE*0.5)-random.randrange(0, 20, 5))}
 
 OCCUPIED_BLOCKS = {}
 
-def block_elements(key, block_number, current_rects):
+def block_elements(player_type, block_number, current_rects, current_positions, file):
     ELEMENTS = {
-    "2": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-4*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 23
-    "13": (7*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA), #up to 94
+    "2": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-4*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #up to 23
+    "13": (7*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA),  #up to 94
     "16": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-2*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA), #down to 4
-    "26": (5*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 45
-    "38": (8*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-5*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 33
-    "43": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 58
-    "59": (2*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 42
-    "62": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-10*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #up to 84
+    "26": (5*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #up to 45
+    "38": (8*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-5*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #down to 33
+    "43": (3*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #up to 58
+    "59": (2*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-6*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #down to 42
+    "62": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-10*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #up to 84
     "73": (6*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-7*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 55
-    "81": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA), #up to 100
-    "91": (10*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-3*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE), #down to 11
+    "81": (1*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-11*BLOCKSIZE-BLOCKSIZE+TOP_BOTTOM_EXTRA),  #up to 100
+    "91": (10*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-3*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE),  #down to 11
     "97": (4*BLOCKSIZE, BLOCKSIZE*BLOCKCOUNT-8*BLOCKSIZE+TOP_BOTTOM_EXTRA-BLOCKSIZE) #down to 64
 }
     if str(block_number) in ELEMENTS:
-        translate = ELEMENTS[f"{block_number}"]
+        for key, value in BLOCKS.items():
+            if value == ELEMENTS[str(block_number)]:
+                current_positions[player_type] = int(key)
+                save_settings(file)
+        #translate = ELEMENTS[f"{block_number}"]
         #print(f"\nChanging pos to: \n{translate}\n")
         return ELEMENTS[f"{block_number}"]
-    return position(key, block_number, current_rects)
+    return position(player_type, block_number, current_rects)
 
 def position(key, block_number, current_rects):
     if block_number != 0:
@@ -177,16 +181,28 @@ def position_indicators(file, dictionary): # dict indicator of blocks
     current_positions = file["Game"]["Players"]["Positions"]
     current_rects = file["Game"]["Players"]["Rects"]
     for key, value in current_positions.items():
-        OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects)
-    return block_handler(OCCUPIED_BLOCKS, dictionary)
+        OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects, current_positions, file)
+        #print(f"OCCUPIED_BLOCKS . . .: {OCCUPIED_BLOCKS}")
+    return block_handler(file, dictionary, OCCUPIED_BLOCKS)
 
-def block_handler(OCCUPIED_BLOCKS, dictionary):
+def block_handler(file, dictionary, OCCUPIED_BLOCKS):
     """Returns a list of dictionaries containing:\n
        Realtime occupied blocks with x & y positions,\n
        Total number of duplicated players,\n
        Draw block rects for pygame,\n
        The duplicated player block info."""
-    
+
+    ### Currently this is required to updated the OCCUPIED_BLOCKS dict with a new player position, when a player is on an element :'(
+    OCCUPIED_BLOCKS = {}
+    current_positions = file["Game"]["Players"]["Positions"]
+    current_rects = file["Game"]["Players"]["Rects"]
+    for key, value in current_positions.items():
+        OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects, current_positions, file)
+        #print(f"OCCUPIED_BLOCKS . . .: {OCCUPIED_BLOCKS}")
+    ### Currently this is required to updated the OCCUPIED_BLOCKS dict with a new player position, when a player is on an element :'(
+
+    #print(f"OCCUPIED_BLOCKS: {OCCUPIED_BLOCKS}")
+
     temp = []
     playerBlockInfo = {}
 
@@ -196,6 +212,8 @@ def block_handler(OCCUPIED_BLOCKS, dictionary):
             temp.append([key[1], value])
             break
 
+    #print(f"\ntemp: {temp}")
+
     for key, value in OCCUPIED_BLOCKS.items():
         try:
             playerBlockInfo[key[1]] += 1
@@ -203,9 +221,8 @@ def block_handler(OCCUPIED_BLOCKS, dictionary):
             playerBlockInfo[key[1]] = 1
     same_block = max(playerBlockInfo.values())
    
-    #print(f"\nplayerBlockInfo: {playerBlockInfo}")
+    ##print(f"\nplayerBlockInfo: {playerBlockInfo}")
     #print(f"\nsame_block: {same_block}")
-    #print(f"\ntemp: {temp}")
     
     if same_block == 1:
         occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo = [OCCUPIED_BLOCKS, 1, playerBlockInfo, BLOCK_HAS_ONE]
