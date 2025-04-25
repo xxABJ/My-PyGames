@@ -11,16 +11,16 @@ def load_settings():
     with open("game.json", "r") as file:
         return json.load(file)
     
-def save_settings(player_settings):
+def save_settings(game):
         with open("game.json", "w") as file:
-            json.dump(player_settings, file)
+            json.dump(game, file)
 
-def turn_handler(Turns, player_settings, Total_players):
+def turn_handler(turns, file, Total_players):
     reset = True
     turn = 0
 
     while reset:
-        for key, value in Turns.items():
+        for key, value in turns.items():
             if value == True:
                 turn += 1
         if turn == Total_players:
@@ -28,18 +28,17 @@ def turn_handler(Turns, player_settings, Total_players):
         else:
             return
         
-    reset_turns(Turns, player_settings)
+    reset_turns(turns, file)
 
-def reset_turns(Turns, player_settings):
-    for key, value in Turns.items():
+def reset_turns(turns, file):
+    for key, value in turns.items():
         if value == True:
-            Turns[key] = False
-            save_settings(player_settings)
-
+            turns[key] = False
+            save_settings(file)
 
 def random_numbers() -> int:
     return text_frame_var.set(random.randint(1,6))
-    
+
 def roll_dice_button_func():
     a = 0
     timer = 500
@@ -49,13 +48,12 @@ def roll_dice_button_func():
         DICE.after(timer, random_numbers)
         timer -= 5
         a += 1
-    print(random.randrange(20, 80, 20), random.randrange(520, 1000, 20))
-
-def skip_button_func():
-    pass
+    roll_button.config(state= 'disabled')
 
 def play_button_func():
-    pass
+    print(text_frame_var.get())
+    text_frame_var.get()
+    return DICE.destroy()
 
 DICE = tk.Tk()
 DICE.title("Roll the dice!")
@@ -71,17 +69,17 @@ text_frame_var = tk.IntVar(value= 0)
 text_frame = ttk.Label(frm, textvariable= text_frame_var, font= "Arial 12 bold", foreground= "black")
 text_frame.grid(column= 0, row= 1)
 
-button_frm = ttk.Frame(DICE, padding= 10)
+button_frm = ttk.Frame(DICE, padding= 40)
 button_frm.grid()
 
-roll_button = ttk.Button(button_frm, text= "ROLL!", command= roll_dice_button_func, padding= 5)
+roll_button = ttk.Button(button_frm, text= "ROLL!", command= roll_dice_button_func, padding= 5, state= 'active')
 roll_button.grid(column=0, row= 0, pady= 10)
 
 play_button = ttk.Button(button_frm, text= "PLAY!", command= play_button_func, padding= 5)
 play_button.grid(column=1, row= 0, pady= 10)
 
-skip_button = ttk.Button(button_frm, text= "SKIP!", command= skip_button_func, padding= 5)
-skip_button.grid(column=2, row= 0, pady= 10)
+#skip_button = ttk.Button(button_frm, text= "SKIP!", command= skip_button_func, padding= 5)
+#skip_button.grid(column=2, row= 0, pady= 10)
 
 #DICE.mainloop()
 
@@ -89,15 +87,16 @@ def dice():
     if player_name_var == "":
         return DICE.destroy
     player_settings = load_settings()
+
     Players = player_settings["Settings"]["Players"]
-    Total_players = player_settings["Settings"]["Total_players"]
-    Turns = player_settings["Game"]["Players"]["Turns"]
+    total_players = player_settings["Settings"]["Total_players"]
+    turns = player_settings["Game"]["Players"]["Turns"]
 
-    turn_handler(Turns, player_settings, Total_players)
+    turn_handler(turns, player_settings, total_players)
 
-    for key, value in Turns.items():
+    for key, value in turns.items():
         if value == False:
-            Turns[key] = True
+            turns[key] = True
 
             player_name_var.set(Players[key][0])
             player_label.config(foreground= Players[key][1])

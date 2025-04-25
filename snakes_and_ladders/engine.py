@@ -1,7 +1,8 @@
-import pygame, os, sys, json
+import pygame, os, sys, json, random
 
 #Files
 import player_selection, dice, board
+from buttons import Button
 
 # SNAKES AND LADDERS
 
@@ -24,6 +25,8 @@ WIDTH, HEIGHT = board.BLOCKSIZE * board.BLOCKCOUNT, board.BLOCKSIZE * board.BLOC
 
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snakes and ladders !")
+
+ROLL_BUTTON = Button(os.path.join("assets", "roll_button.png"), os.path.join("assets", "roll_button_pressed.png"), (1110, 500), 0.3)
 
 #globals
 cat = "cat"
@@ -76,10 +79,20 @@ def sprite_assigner(key, value):
         elif value[1] == "blue":
             fly = player_selection.FLY_BLUE
 
+def idling(dictionary):
+    for key, value in dictionary.items():
+        value[1][0] += random.randrange(0, 2, 1)
+        value[1][1] += random.randrange(0, 2, 1)
+        value[1][0] -= random.randrange(0, 2, 1)
+        value[1][1] -= random.randrange(0, 2, 1)
+        #pygame.time.delay(random.randrange(20, 30, 2))
+    return dictionary
+
 def draw(game, player_rects, cat, dog, sheep, fly):
 
     #window
     WINDOW.blit(board.BOARD, (0,0))
+    ROLL_BUTTON.draw(WINDOW)
     
     #players
     if cat != "cat":
@@ -114,9 +127,19 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        
+        if ROLL_BUTTON.is_pressed():
+            print("\nRoll button is pressed !")
+            dice.dice()
+
+        if ROLL_BUTTON.is_over_button():
+            pass
+            #print("\nMouse is over the roll button !")
 
         board.player_rect_generator(game, player_rects)
+        idling(player_rects)
         draw(game, player_rects, cat, dog, sheep, fly)
+        #dice.dice()
 
         clock.tick(60)
     

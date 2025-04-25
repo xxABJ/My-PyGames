@@ -164,15 +164,29 @@ def position(key, block_number, current_rects):
         block = BLOCKS[f"{block_number}"]
         return block
     else:
-        if key == 'cat':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        elif key == 'dog':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        elif key == 'sheep':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        elif key == 'fly':
-            return (current_rects[key]["x"], current_rects[key]["y"])
-        
+        if current_rects[key] == None:
+            if key == 'cat':
+                current_rects[key]["x"] = random.randrange(20, 80, 20); current_rects[key]["y"] = random.randrange(520, 1000, 20)
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            elif key == 'dog':
+                current_rects[key]["x"] = random.randrange(20, 80, 20); current_rects[key]["y"] = random.randrange(520, 1000, 20)
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            elif key == 'sheep':
+                current_rects[key]["x"] = random.randrange(20, 80, 20); current_rects[key]["y"] = random.randrange(520, 1000, 20)
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            elif key == 'fly':
+                current_rects[key]["x"] = random.randrange(20, 80, 20); current_rects[key]["y"] = random.randrange(520, 1000, 20)
+                return (current_rects[key]["x"], current_rects[key]["y"])
+        else:
+            if key == 'cat':
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            elif key == 'dog':
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            elif key == 'sheep':
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            elif key == 'fly':
+                return (current_rects[key]["x"], current_rects[key]["y"])
+            
 def print_position(block_number): #print pos
     block = BLOCKS[f"{block_number}"]
     return print(f"\nCurrent position: \n{block}\n")
@@ -181,8 +195,23 @@ def position_indicators(file, dictionary): # dict indicator of blocks
     current_positions = file["Game"]["Players"]["Positions"]
     current_rects = file["Game"]["Players"]["Rects"]
     for key, value in current_positions.items():
+        #if value != 0:
         OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects, current_positions, file)
         #print(f"OCCUPIED_BLOCKS . . .: {OCCUPIED_BLOCKS}")
+        #else:
+            #print("in .. 0")
+            #OCCUPIED_BLOCKS[key, value] = (current_rects[key]["x"], current_rects[key]["y"])
+            #OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects, current_positions, file)
+        
+    
+    for key, value in OCCUPIED_BLOCKS.items():
+        if key[0] in current_rects and key[1] != 0:
+            #print("in")
+            current_rects[key[0]]["x"] = value[0]
+            current_rects[key[0]]["y"] = value[1]
+        #print(f"\ncurrent_rects: {current_rects}")
+    save_settings(file)
+
     return block_handler(file, dictionary, OCCUPIED_BLOCKS)
 
 def block_handler(file, dictionary, OCCUPIED_BLOCKS):
@@ -197,10 +226,10 @@ def block_handler(file, dictionary, OCCUPIED_BLOCKS):
     current_positions = file["Game"]["Players"]["Positions"]
     current_rects = file["Game"]["Players"]["Rects"]
     for key, value in current_positions.items():
-        OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects, current_positions, file)
-        #print(f"OCCUPIED_BLOCKS . . .: {OCCUPIED_BLOCKS}")
+        if key[0] != 0:
+            OCCUPIED_BLOCKS[key, value] = block_elements(key, value, current_rects, current_positions, file)
+            #print(f"OCCUPIED_BLOCKS . . .: {OCCUPIED_BLOCKS}")
     ### Currently this is required to updated the OCCUPIED_BLOCKS dict with a new player position, when a player is on an element :'(
-
     #print(f"OCCUPIED_BLOCKS: {OCCUPIED_BLOCKS}")
 
     temp = []
@@ -261,6 +290,8 @@ def draw_blocks(occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo, dicti
     players_on_blocks = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[1]
     player_block_info = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[2] # set for extra info :p
     block_premade_rects = occupiedBlocks_playersOnBlocks_blockRects_playerBlockInfo[3]
+
+    #print(f"\noccupied_blocks: {occupied_blocks}")
 
     dynamic_index = 0
     saved_index = 0
