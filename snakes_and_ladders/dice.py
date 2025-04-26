@@ -1,4 +1,4 @@
-import tkinter as tk, json, random, os
+import tkinter as tk, json, random
 from tkinter import ttk
 
 # DICE
@@ -108,3 +108,4 @@ def dice():
 
 if __name__ == "__main__":
     dice()
+

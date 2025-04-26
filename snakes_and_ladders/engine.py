@@ -26,7 +26,8 @@ WIDTH, HEIGHT = board.BLOCKSIZE * board.BLOCKCOUNT, board.BLOCKSIZE * board.BLOC
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snakes and ladders !")
 
-ROLL_BUTTON = Button(os.path.join("assets", "roll_button.png"), os.path.join("assets", "roll_button_pressed.png"), (1110, 500), 0.3)
+ROLL_BUTTON = Button(os.path.join("assets", "roll_button.png"), os.path.join("assets", "roll_button_hover.png"), os.path.join("assets", "roll_button_pressed.png"), (1110, 500), 0.3)
+RED_BUTTON = Button(os.path.join("assets", "red_button.png"), os.path.join("assets", "red_button_hover.png"), os.path.join("assets", "red_button_pressed.png"), (1110, 550), 2)
 
 #globals
 cat = "cat"
@@ -93,6 +94,7 @@ def draw(game, player_rects, cat, dog, sheep, fly):
     #window
     WINDOW.blit(board.BOARD, (0,0))
     ROLL_BUTTON.draw(WINDOW)
+    RED_BUTTON.draw(WINDOW)
     
     #players
     if cat != "cat":
@@ -128,13 +130,17 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
         
-        if ROLL_BUTTON.is_pressed():
+        if ROLL_BUTTON.is_pressed(): 
             print("\nRoll button is pressed !")
-            dice.dice()
-
-        if ROLL_BUTTON.is_over_button():
+            #dice.dice()
+        elif ROLL_BUTTON.is_over_button():
             pass
             #print("\nMouse is over the roll button !")
+        
+        if RED_BUTTON.is_pressed():
+            print("\nRed button is pressed !")
+        elif RED_BUTTON.is_over_button():
+            pass
 
         board.player_rect_generator(game, player_rects)
         idling(player_rects)
