@@ -1,4 +1,5 @@
 import pygame
+from menu import *
 
 # gameclass - https://www.youtube.com/@CDcodes
 
@@ -11,16 +12,25 @@ class Game:
         pygame.init()
         self.running, self.playing = True, False
         self.ESCAPE_KEY, self.ENTER_KEY, self.UP_KEY, self.DOWN_KEY, self.LEFT_KEY, self.RIGHT_KEY, self.BACKSPACE_KEY = False, False, False, False, False, False, False
-        self.DISPLAY_W, self.DISPLAY_H = 800, 600
+        self.video_resolution = [(800, 600), (1024, 760), (1280, 720)]
+        self.DISPLAY_W, self.DISPLAY_H = self.video_resolution[0]
+        #self.choice = 0
+        #self.change_resolution = False
         self.display_surface = pygame.Surface((self.DISPLAY_W, self.DISPLAY_H))
         self.window = pygame.display.set_mode((self.DISPLAY_W, self.DISPLAY_H))
         self.font_name = pygame.font.get_default_font()
         self.HIGHLIGHTED, self.MENUCOLOUR, self.WHITE = (120, 170, 60), (80, 110, 100), (255, 255, 255)
+        self.main_menu = MainMenu(self)
+        self.options_menu = OptionsMenu(self)
+        self.credits_menu = CreditsMenu(self)
+        self.videosettings_menu = VideoSettings(self)
+        self.current_menu = self.main_menu
     
     def check_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running, self.playing = False, False
+                self.current_menu.run_menu_display = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.ESCAPE_KEY = True
@@ -54,6 +64,13 @@ class Game:
     def draw_text(self, text, size, x, y):
         font = pygame.font.Font(self.font_name, size)
         text_surface = font.render(text, True, self.WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.center = (x, y)
+        self.display_surface.blit(text_surface, text_rect)
+
+    def draw_highlighted_text(self, text, size, x, y):
+        font = pygame.font.Font(self.font_name, size)
+        text_surface = font.render(text, True, self.HIGHLIGHTED)
         text_rect = text_surface.get_rect()
         text_rect.center = (x, y)
         self.display_surface.blit(text_surface, text_rect)
