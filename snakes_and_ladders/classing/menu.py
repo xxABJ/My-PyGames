@@ -150,12 +150,63 @@ class OptionsMenu(Menu):
                 self.game.current_menu = self.game.videosettings_menu
             elif self.state == "Options Sound Settings":
                 pass
-            elif self.state == "Menu Colour Settings":
-                pass
+            elif self.state == "Options Menu Colour Settings":
+                self.game.current_menu = self.game.coloursettings_menu
 
         elif self.game.ESCAPE_KEY:
             self.game.current_menu = self.game.main_menu
         
+        self.run_menu_display = False
+
+class MenuColourSettings(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.game = game
+        self.state = "Menu Colour Settings"
+        self.menucolourx, self.menucoloury = self.game.DISPLAY_W/2, self.game.DISPLAY_H/2
+        self.choice = 0
+        self.menucolour_choice = None
+
+    def display_menu(self):
+        self.run_menu_display = True
+        while self.run_menu_display:
+            self.game.check_events()
+            self.check_input()
+            self.game.display_surface.fill(self.game.MENUCOLOUR)
+            self.game.draw_text("Menu Colour Settings", 36, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 200)
+            if self.choice == 0:
+                self.game.draw_text("Menu Colour :", 30, self.menucolourx - 250, self.menucoloury + 40)
+                self.game.draw_text(f"< Light Green-Blue {str(self.game.menucolours[self.choice])} >", 30, self.menucolourx + 130, self.menucoloury + 40)
+            elif self.choice == 1:
+                self.game.draw_text("Menu Colour :", 30, self.menucolourx - 250, self.menucoloury + 40)
+                self.game.draw_text(f"< Light Orange {str(self.game.menucolours[self.choice])} >", 30, self.menucolourx + 130, self.menucoloury + 40)
+            elif self.choice == 2:
+                self.game.draw_text("Menu Colour :", 30, self.menucolourx - 250, self.menucoloury + 40)
+                self.game.draw_text(f"< Light Purple {str(self.game.menucolours[self.choice])} >", 30, self.menucolourx + 130, self.menucoloury + 40)
+            elif self.choice == 3:
+                self.game.draw_text("Menu Colour :", 30, self.menucolourx - 250, self.menucoloury + 40)
+                self.game.draw_text(f"< Black {str(self.game.menucolours[self.choice])} >", 30, self.menucolourx + 130, self.menucoloury + 40)
+            self.blit_menu()
+    
+    def move_choice(self):
+        if self.game.RIGHT_KEY:
+            if -1 < self.choice < len(self.game.menucolours) - 1:
+                self.choice += 1
+            else:
+                self.choice = len(self.game.menucolours) - 1
+        elif self.game.LEFT_KEY:
+            if 0 < self.choice < len(self.game.menucolours):
+                self.choice -= 1
+            else:
+                self.choice = 0
+
+    def check_input(self):
+        self.move_choice()
+        if self.game.ENTER_KEY:
+            self.menucolour_choice = self.game.menucolours[self.choice]
+            self.game.MENUCOLOUR = self.menucolour_choice
+        elif self.game.ESCAPE_KEY:
+            self.game.current_menu = self.game.options_menu
         self.run_menu_display = False
 
 class VideoSettings(Menu):

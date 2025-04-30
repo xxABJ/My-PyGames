@@ -1,7 +1,6 @@
 from game import Game
 
 g = Game()
-
 while g.running:
     g.current_menu.display_menu()
     #if not g.running and g.change_resolution:
