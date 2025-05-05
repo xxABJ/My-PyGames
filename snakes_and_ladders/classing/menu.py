@@ -1,4 +1,4 @@
-import pygame
+import pygame, json
 
 class Menu():
     def __init__(self, game):
@@ -12,7 +12,7 @@ class Menu():
         self.game.draw_highlighted_text(self.selected, 34, self.highlightedx, self.highlightedy)
 
     def blit_menu(self):
-        self.game.window.blit(self.game.display_surface, (0, 0))
+        self.game.MAIN.blit(self.game.window, (0, 0))
         pygame.display.update()
         self.game.reset_keys()
 
@@ -30,7 +30,7 @@ class MainMenu(Menu):
         while self.run_menu_display:
             self.game.check_events()
             self.check_input()
-            self.game.display_surface.fill(self.game.MENUCOLOUR)
+            self.game.window.fill(self.game.MENUCOLOUR)
             self.game.draw_text("Main Menu", 36, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 200)
             if self.selected == "Start Game":
                 self.draw_selected()
@@ -85,6 +85,20 @@ class MainMenu(Menu):
                 self.game.current_menu = self.game.credits_menu
             self.run_menu_display = False
 
+class PlayerSelectionMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+
+        
+    def load_settings():
+        with open("game.json", "r") as file:
+            return json.load(file)
+
+    def save_settings(game):
+        with open("game.json", "w") as file:
+            json.dump(game, file)
+
+
 class OptionsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
@@ -99,7 +113,7 @@ class OptionsMenu(Menu):
         while self.run_menu_display:
             self.game.check_events()
             self.check_input()
-            self.game.display_surface.fill(self.game.MENUCOLOUR)
+            self.game.window.fill(self.game.MENUCOLOUR)
             self.game.draw_text("Options", 36, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 200)
             if self.selected == "Video Settings":
                 self.draw_selected()
@@ -172,7 +186,7 @@ class MenuColourSettings(Menu):
         while self.run_menu_display:
             self.game.check_events()
             self.check_input()
-            self.game.display_surface.fill(self.game.MENUCOLOUR)
+            self.game.window.fill(self.game.MENUCOLOUR)
             self.game.draw_text("Menu Colour Settings", 36, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 200)
             if self.choice == 0:
                 self.game.draw_text("Menu Colour :", 30, self.menucolourx - 250, self.menucoloury + 40)
@@ -224,7 +238,7 @@ class VideoSettings(Menu):
         while self.run_menu_display:
             self.game.check_events()
             self.check_input()
-            self.game.display_surface.fill(self.game.MENUCOLOUR)
+            self.game.window.fill(self.game.MENUCOLOUR)
             self.game.draw_text("Video Settings", 36, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 200)
             if self.choice == 0:
                 self.game.draw_text("Resolution :", 30, self.resolutionx - 120, self.resolutiony)
@@ -266,18 +280,119 @@ class CreditsMenu(Menu):
     def __init__(self, game):
         Menu.__init__(self, game)
         self.state = "Credits"
+        self.var_num = 0
         self.creditsinfox, self.creditsinfoy = self.game.DISPLAY_W/2, self.game.DISPLAY_H/2
     
     def display_menu(self):
         self.run_menu_display = True
+        up_side = [-20, 0]
+        left_side = [0, -20]
         while self.run_menu_display:
             self.game.check_events()
             self.check_input()
-            self.game.display_surface.fill(self.game.MENUCOLOUR)
-            self.game.draw_text("Credits", 36, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 200)
-            self.game.draw_text("Made by Abj", 36, self.creditsinfox, self.creditsinfoy)
-            self.game.draw_text("https://www.youtube.com/@CDcodes", 36, self.creditsinfox, self.creditsinfoy + 50)
+            self.game.window.fill(self.game.MENUCOLOUR)
+            for up in range(4):
+                self.game.window.fill(self.game.MENUCOLOUR)
+                self.creditsinfox += up_side[0]
+
+                if self.var_num == 0:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("      Made by Abj      ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 1
+                elif self.var_num == 1:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("   Made by Abj         ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 2
+                elif self.var_num == 2:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("Mage by Abj            ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 3
+                elif self.var_num == 3:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("   Made by Abj         ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 4
+                elif self.var_num == 4:
+                    self.game.draw_text("      Made by Abj      ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 5
+                elif self.var_num == 5:
+                    self.game.draw_text("        Made by Abj   ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 6
+                elif self.var_num == 6:
+                    self.game.draw_text("            Made by Abj", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 7
+                elif self.var_num == 7:
+                    self.game.draw_text("         Made by Abj   ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 0
+                elif self.var_num == 8:
+                    self.game.draw_text("      Made by Abj      ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 1
+                
+                for left in range(4):
+                    self.creditsinfoy += left_side[1]
+                    pygame.time.delay(250)
+
+            for down in range(4):
+                self.game.display_surface.fill(self.game.MENUCOLOUR)
+                self.creditsinfox -= up_side[0]
+
+                if self.var_num == 0:
+                    self.game.draw_text("Credits",90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("      Made by Abj      ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 1
+                elif self.var_num == 1:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("   Made by Abj         ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 2
+                elif self.var_num == 2:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("Mage by Abj            ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 3
+                elif self.var_num == 3:
+                    self.game.draw_text("Credits", 90, self.game.DISPLAY_W/2, self.game.DISPLAY_H/2 - 380)
+                    self.game.draw_text("   Made by Abj         ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 4
+                elif self.var_num == 4:
+                    self.game.draw_text("      Made by Abj      ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 5
+                elif self.var_num == 5:
+                    self.game.draw_text("        Made by Abj   ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 6
+                elif self.var_num == 6:
+                    self.game.draw_text("            Made by Abj", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 7
+                elif self.var_num == 7:
+                    self.game.draw_text("         Made by Abj   ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 0
+                elif self.var_num == 8:
+                    self.game.draw_text("      Made by Abj      ", 36, self.creditsinfox, self.creditsinfoy)
+                    self.blit_menu()
+                    self.var_num = 1
+                
+                for right in range(4):
+                    self.creditsinfoy -= left_side[1]
+                    pygame.time.delay(250)
+                
+                pygame.display.update()
+
             self.blit_menu()
+            pygame.time.delay(250)
     
     def check_input(self):
         if self.game.ESCAPE_KEY:

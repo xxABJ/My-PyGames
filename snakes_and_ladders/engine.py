@@ -132,7 +132,7 @@ def main():
         
         if ROLL_BUTTON.is_pressed(): 
             print("\nRoll button is pressed !")
-            #dice.dice()
+            dice.dice()
         elif ROLL_BUTTON.is_over_button():
             pass
             #print("\nMouse is over the roll button !")
