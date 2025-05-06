@@ -298,7 +298,7 @@ class Game:
             self.draw_cells()
 
             # cell list
-            print(self.pos_1)
+            #print(self.pos_1)
 
             #self.draw_text("We are inside the game!", 30, self.DISPLAY_W/2, self.DISPLAY_H/2) # between display resetting & main window blitting
             #self.window.blit(self.display_surface, (0, 0))
